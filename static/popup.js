@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
           `;
 
-          const response = await fetch("http://localhost:5000/get_passwords");
+          const response = await fetch("http://localhost:5000/get_passwords_ext");
           
           if (!response.ok) {
               throw new Error('Failed to fetch passwords');
@@ -26,9 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
           
           // Insert the HTML content
           passwordList.innerHTML = htmlContent;
-          
-          
-        
+          setupPasswordTableInteractions();
           
       } catch (error) {
           console.error("Error fetching passwords:", error);
@@ -39,6 +37,52 @@ document.addEventListener("DOMContentLoaded", () => {
           `;
       }
   });
+  
+  // Setup interactions for password table (toggle and copy)
+  function setupPasswordTableInteractions() {
+    // Toggle password visibility
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function() {
+            const passwordCell = this.previousElementSibling;
+            const isHidden = passwordCell.textContent.trim() === '••••••••';
+            
+            if (isHidden) {
+                passwordCell.textContent = passwordCell.dataset.password;
+                this.innerHTML = '<i class="bi bi-eye-slash"></i>';
+            } else {
+                passwordCell.textContent = '••••••••';
+                this.innerHTML = '<i class="bi bi-eye"></i>';
+            }
+        });
+    });
+
+
+    // Copy credentials to clipboard
+    document.querySelectorAll('.copy-credentials').forEach(button => {
+        button.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const website = row.querySelector('td:nth-child(1)').textContent;
+            const username = row.querySelector('td:nth-child(2)').textContent;
+            const password = row.querySelector('.password-cell').dataset.password;
+
+            const textToCopy = `Website: ${website}\nUsername: ${username}\nPassword: ${password}`;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalIcon = button.innerHTML;
+                button.innerHTML = '<i class="bi bi-check2"></i>';
+                button.classList.remove('btn-outline-primary');
+                button.classList.add('btn-success');
+                
+                setTimeout(() => {
+                    button.innerHTML = originalIcon;
+                    button.classList.add('btn-outline-primary');
+                    button.classList.remove('btn-success');
+                }, 2000);
+            });
+        });
+    });
+
+}
 
   // Credentials loading code remains the same
   (async () => {

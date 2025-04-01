@@ -8,51 +8,7 @@
     <link href="/static/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        /* Custom theme styles*/
-        :root {
-            --primary-bg-light: #ffffff;
-            --primary-text-light: #000000;
-            --primary-bg-dark: #121212;
-            --primary-text-dark: #e0e0e0;
-            --card-bg-light: #f8f9fa;
-            --card-bg-dark: #1e1e1e;
-        }
-
-        body {
-            width: 350px;
-            height: 500px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        /* Dark mode styles */
-        [data-bs-theme="dark"] {
-            background-color: var(--primary-bg-dark);
-            color: var(--primary-text-dark);
-        }
-
-        [data-bs-theme="dark"] .card {
-            background-color: var(--card-bg-dark);
-            color: var(--primary-text-dark);
-            border-color: #444;
-        }
-
-        /* Light mode styles */
-        [data-bs-theme="light"] {
-            background-color: var(--primary-bg-light);
-            color: var(--primary-text-light);
-        }
-
-        [data-bs-theme="light"] .card {
-            background-color: var(--card-bg-light);
-            color: var(--primary-text-light);
-            border-color: #ddd;
-        }
-
-        .form-check-input.theme-toggle {
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/popup.css">
 </head>
 <body>
     <div class="container py-3">
@@ -81,7 +37,7 @@
             </div>
             <div class="card-body tab-content">
                 <div class="tab-pane fade show active" id="home">
-                    <h5 class="card-title">Welcome to Password Manager</h5>
+                    <h6 class="card-title">Welcome to Your Password Manager</h6>
                     <div id="credentials-list" class="list-group">
                         <!-- Credentials will be dynamically added here -->
                     </div>

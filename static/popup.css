@@ -1,82 +1,50 @@
+/* Custom theme styles*/
 :root {
-    --primary-bg: #f4f4f4;
-    --primary-text: #333;
-    --secondary-bg: #ffffff;
-    --accent-color: #007bff;
-}
-
-[data-theme='dark'] {
-    --primary-bg: #121212;
-    --primary-text: #e0e0e0;
-    --secondary-bg: #1e1e1e;
-    --accent-color: #4da6ff;
+    --primary-bg-light: #ffffff;
+    --primary-text-light: #000000;
+    --primary-bg-dark: #121212;
+    --primary-text-dark: #e0e0e0;
+    --card-bg-light: #f8f9fa;
+    --card-bg-dark: #1e1e1e;
 }
 
 body {
     width: 350px;
-    background-color: var(--primary-bg);
-    color: var(--primary-text);
+    height: 500px;
     transition: background-color 0.3s, color 0.3s;
 }
 
-.container {
-    background-color: var(--primary-bg);
+/* Dark mode styles */
+[data-bs-theme="dark"] {
+    background-color: var(--primary-bg-dark);
+    color: var(--primary-text-dark);
 }
 
-.card {
-    background-color: var(--secondary-bg);
-    border: none;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+[data-bs-theme="dark"] .card {
+    background-color: var(--card-bg-dark);
+    color: var(--primary-text-dark);
+    border-color: #444;
 }
 
-.card-header {
-    background-color: transparent;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
+/* Light mode styles */
+[data-bs-theme="light"] {
+    background-color: var(--primary-bg-light);
+    color: var(--primary-text-light);
 }
 
-.nav-tabs .nav-link {
-    color: var(--primary-text);
+[data-bs-theme="light"] .card {
+    background-color: var(--card-bg-light);
+    color: var(--primary-text-light);
+    border-color: #ddd;
 }
 
-.nav-tabs .nav-link.active {
-    background-color: var(--secondary-bg);
-    color: var(--accent-color);
-    border-color: transparent transparent var(--accent-color);
-}
-
-.credential-item {
-    cursor: pointer;
-    padding: 10px;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    transition: background-color 0.2s;
-}
-
-.credential-item:hover {
-    background-color: rgba(0,0,0,0.05);
-}
-
-.form-check-input {
+.form-check-input.theme-toggle {
     cursor: pointer;
 }
 
-#theme-icon {
-    font-size: 1.2rem;
-    vertical-align: middle;
+#passwordTable {
+    transition: opacity 0.3s ease;
 }
-
-/* Dark mode specific adjustments */
-[data-theme='dark'] .credential-item:hover {
-    background-color: rgba(255,255,255,0.1);
-}
-
-[data-theme='dark'] .card-header {
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-.copy-btn {
-    transition: color 0.3s;
-}
-
-.copy-btn.text-success {
-    color: #28a745 !important;
+#passwordTable.loading {
+    opacity: 0.5;
 }
