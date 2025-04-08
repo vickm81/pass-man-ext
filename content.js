@@ -23,18 +23,29 @@ function findLoginFields() {
     contentDebug.log('Searching for login fields on page:', window.location.href);
     
     const usernameSelectors = [
-
+        // Specific to this case
+        'input[formcontrolname="email_address"]',
+        'input[formcontrolname="email"]',
+        
+        // General selectors
         'input[type="email"]',
         'input[type="text"][id*="email"]',
-        'input[type="text"][id*="user"]',
         'input[type="text"][name*="email"]',
-        'input[type="text"][name*="user"]',
-        'input[type="text"][name*="name"]'
-
+        'input[type="text"][formcontrolname*="mail"]',
+        'input[autocomplete="username"]',
+        'input[autocomplete="email"]'
     ];
 
     const passwordSelectors = [
-        'input[type="password"]'
+        // Specific to this case
+        'input[formcontrolname="password"]',
+        
+        // General selectors
+        'input[type="password"]',
+        'input[autocomplete="current-password"]',
+        'input[name*="pass"]',
+        'input[id*="pass"]',
+        'input[formcontrolname*="pass"]'
     ];
 
     const usernameField = document.querySelector(usernameSelectors.join(','));
@@ -93,7 +104,7 @@ async function updateLastUsed(credentials) {
     contentDebug.log('Updating last used timestamp for:', credentials.website);
     
     try {
-        const response = await fetch('http://localhost:5000/api/handle-credentials', {
+        const response = await fetch('http://0.0.0.0:5000/api/handle-credentials', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

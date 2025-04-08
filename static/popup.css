@@ -48,3 +48,17 @@ body {
 #passwordTable.loading {
     opacity: 0.5;
 }
+logo-img {
+    height: 50px; /* Fixed height */
+    width: auto; /* Maintain aspect ratio */
+    transition: opacity 0.2s ease;
+  }
+  
+  .logo-img:hover {
+    opacity: 0.8;
+  }
+  
+  /* For dark mode support */
+  [data-bs-theme="dark"] .logo-img {
+    filter: brightness(0) invert(1); /* Makes logo white in dark mode */
+  }

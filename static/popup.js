@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
           `;
 
-          const response = await fetch("http://localhost:5000/get_passwords_ext");
+          const response = await fetch("http://0.0.0.0:5000/get_passwords_ext");
           
           if (!response.ok) {
               throw new Error('Failed to fetch passwords');
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log('[DEBUG] Current URL:', currentUrl);
   
       try {
-          const response = await fetch('http://localhost:5000/api/handle-credentials', {
+          const response = await fetch('http://0.0.0.0:5000/api/handle-credentials', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
@@ -118,10 +118,10 @@ document.addEventListener("DOMContentLoaded", () => {
                   const credItem = document.createElement('div');
                   credItem.className = 'credential-item list-group-item list-group-item-action';
                   credItem.innerHTML = `
-                      <div class="d-flex w-100 justify-content-between">
-                          <h5 class="mb-1">${cred.username}</h5>
-                          <small>${cred.website}</small>
-                      </div>
+                  <div class="d-flex w-100" style="gap: 8px">
+                    <h6 class="mb-0 text-truncate flex-grow-1" style="min-width: 0">${cred.username}</h6>
+                    <small class="text-muted flex-shrink-0">@ ${cred.website}</small>
+                  </div>
                   `;
                   
                   credItem.addEventListener('click', () => {
