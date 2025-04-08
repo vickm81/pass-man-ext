@@ -6,7 +6,6 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log('[DEBUG] Received message:', request);
   
   if (request.type === 'getCredentials') {
     fetchCredentials(request.url)

@@ -84,13 +84,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 }
 
-  // Credentials loading code remains the same
   (async () => {
       console.log('[DEBUG] Popup opened');
       
       const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
       const currentUrl = tabs[0].url;
-      console.log('[DEBUG] Current URL:', currentUrl);
   
       try {
           const response = await fetch('http://0.0.0.0:5000/api/handle-credentials', {
@@ -106,14 +104,12 @@ document.addEventListener("DOMContentLoaded", () => {
           });
   
           const data = await response.json();
-          console.log('[DEBUG] Received credentials:', data);
           
           if (data.credentials?.length > 0) {
               const credentialsList = document.getElementById('credentials-list');
-              credentialsList.innerHTML = ''; // Clear any existing content
+              credentialsList.innerHTML = ''; 
               
               data.credentials.forEach(cred => {
-                  console.log('[DEBUG] Adding credential to list:', cred.username);
                   
                   const credItem = document.createElement('div');
                   credItem.className = 'credential-item list-group-item list-group-item-action';
@@ -124,9 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   </div>
                   `;
                   
-                  credItem.addEventListener('click', () => {
-                      console.log('[DEBUG] Credential selected:', cred.username);
-                      
+                  credItem.addEventListener('click', () => {                      
                       chrome.tabs.sendMessage(tabs[0].id, {
                           type: 'fillCredentials',
                           credentials: cred
@@ -137,11 +131,9 @@ document.addEventListener("DOMContentLoaded", () => {
                   credentialsList.appendChild(credItem);
               });
           } else {
-              console.log('[DEBUG] No credentials found');
               document.getElementById('credentials-list').innerHTML = '<p class="text-center text-muted">No saved credentials for this site</p>';
           }
       } catch (error) {
-          console.error('[DEBUG] Error loading credentials:', error);
           document.getElementById('credentials-list').innerHTML = '<p class="text-center text-muted">Error loading credentials</p>';
       }
   })();

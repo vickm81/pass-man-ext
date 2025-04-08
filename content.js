@@ -10,9 +10,7 @@ const contentDebug = {
 
 // Listen for messages from the background script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    contentDebug.log('Message received:', message);
     if (message.type === 'fillCredentials') {
-        contentDebug.log('Filling credentials for:', message.credentials.website);
         autofillCredentials(message.credentials);
     }
 });
@@ -20,7 +18,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 let lastFocusedInput = null;
 
 function findLoginFields() {
-    contentDebug.log('Searching for login fields on page:', window.location.href);
     
     const usernameSelectors = [
         // Specific to this case
@@ -30,21 +27,25 @@ function findLoginFields() {
         // General selectors
         'input[type="email"]',
         'input[type="text"][id*="email"]',
+        'input[type="text"][id*="name"]',
         'input[type="text"][name*="email"]',
+        'input[type="text"][name*="name"]',
         'input[type="text"][formcontrolname*="mail"]',
         'input[autocomplete="username"]',
-        'input[autocomplete="email"]'
+        'input[autocomplete="email"]',
+        'input[type="text"][id*="user"]',
+        'input[type="text"][name*="user"]'
+
     ];
 
     const passwordSelectors = [
-        // Specific to this case
         'input[formcontrolname="password"]',
         
-        // General selectors
         'input[type="password"]',
+        'input[type="password"][id*="password"]',
         'input[autocomplete="current-password"]',
-        'input[name*="pass"]',
-        'input[id*="pass"]',
+        'input[name*="password"]',
+        'input[id*="password"]',
         'input[formcontrolname*="pass"]'
     ];
 
@@ -67,28 +68,21 @@ function findLoginFields() {
     return { usernameField, passwordField };
 }
 
-function autofillCredentials(credentials) {
-    contentDebug.log('Starting autofill process');
-    
+function autofillCredentials(credentials) {    
     const { usernameField, passwordField } = findLoginFields();
 
-    if (usernameField && passwordField) {
-        contentDebug.log('Found both username and password fields, proceeding with autofill');
-        
+    if (usernameField && passwordField) {        
         try {
             // Simulate natural typing
             usernameField.value = credentials.username;
             usernameField.dispatchEvent(new Event('input', { bubbles: true }));
             usernameField.dispatchEvent(new Event('change', { bubbles: true }));
-            contentDebug.log('Username field filled and events dispatched');
 
             passwordField.value = credentials.password;
             passwordField.dispatchEvent(new Event('input', { bubbles: true }));
             passwordField.dispatchEvent(new Event('change', { bubbles: true }));
-            contentDebug.log('Password field filled and events dispatched');
 
-            // Update last used timestamp
-            updateLastUsed(credentials);
+
         } catch (error) {
             contentDebug.error('Error during autofill:', error);
         }
@@ -100,29 +94,6 @@ function autofillCredentials(credentials) {
     }
 }
 
-async function updateLastUsed(credentials) {
-    contentDebug.log('Updating last used timestamp for:', credentials.website);
-    
-    try {
-        const response = await fetch('http://0.0.0.0:5000/api/handle-credentials', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({
-                action: 'update',
-                website: credentials.website,
-                username: credentials.username
-            })
-        });
-
-        const data = await response.json();
-        contentDebug.log('Update response:', data);
-    } catch (error) {
-        contentDebug.error('Failed to update last used timestamp:', error);
-    }
-}
 
 // Listen for focus on input fields
 document.addEventListener('focusin', (e) => {
@@ -138,17 +109,13 @@ document.addEventListener('focusin', (e) => {
         // Check if this is a login form
         const { usernameField, passwordField } = findLoginFields();
         if (usernameField || passwordField) {
-            contentDebug.log('Login form detected, requesting credentials');
             
             chrome.runtime.sendMessage({
                 type: 'getCredentials',
                 url: window.location.href
-            }, response => {
-                contentDebug.log('Received credential response:', response);
-                
+            }, response => {                
                 if (response?.success && response.credentials?.length > 0) {
                     if (response.credentials.length === 1) {
-                        contentDebug.log('Single credential found, proceeding with autofill');
                         autofillCredentials(response.credentials[0]);
                     } else {
                         contentDebug.log('Multiple credentials found:', response.credentials.length);
@@ -165,7 +132,6 @@ document.addEventListener('focusin', (e) => {
 const observer = new MutationObserver((mutations) => {
     for (const mutation of mutations) {
         if (mutation.addedNodes.length) {
-            contentDebug.log('DOM changed, checking for new login fields');
             const { usernameField, passwordField } = findLoginFields();
             if (usernameField || passwordField) {
                 contentDebug.log('Login form found in dynamic content');
@@ -180,4 +146,3 @@ observer.observe(document.body, {
     subtree: true
 });
 
-contentDebug.log('Content script initialized on:', window.location.href);
