@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 async function fetchCredentials(url) {
   console.log('[DEBUG] Fetching credentials for URL:', url);
   
-  const response = await fetch('http://0.0.0.0:5000/api/handle-credentials', {
+  const response = await fetch('http://localhost:5000/api/handle-credentials', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
