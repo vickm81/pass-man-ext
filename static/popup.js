@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const currentUrl = tabs[0].url;
   
       try {
-          const response = await fetch('http://localhost:5000/api/handle-credentials', {
+          const response = await fetch('http://localhost:8080/api/handle-credentials', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
